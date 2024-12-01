@@ -5,30 +5,8 @@ from langchain_core.runnables import RunnableConfig
 
 from react_agent.configuration import Configuration
 from react_agent.state import State, Outline, Section, Subsection
-from react_agent.utils import load_chat_model, get_message_text
+from react_agent.utils import load_chat_model, get_message_text, dict_to_outline
 from react_agent.prompts import REFINE_OUTLINE_PROMPT
-
-def dict_to_outline(outline_dict: Dict[str, Any]) -> Outline:
-    """Convert a dictionary to an Outline object."""
-    sections = []
-    for section_data in outline_dict.get("sections", []):
-        subsections = []
-        for subsection_data in section_data.get("subsections", []) or []:
-            subsections.append(Subsection(
-                subsection_title=subsection_data["subsection_title"],
-                description=subsection_data["description"]
-            ))
-        
-        sections.append(Section(
-            section_title=section_data["section_title"],
-            description=section_data["description"],
-            subsections=subsections
-        ))
-    
-    return Outline(
-        page_title=outline_dict["page_title"],
-        sections=sections
-    )
 
 async def refine_outline(
     state: State, 

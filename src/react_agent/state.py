@@ -41,8 +41,7 @@ class RelatedTopics:
 
 @dataclass
 class Subsection:
-    """Represents a subsection in a Wikipedia-style outline."""
-
+    """Represents a subsection in a Wikipedia article."""
     subsection_title: str
     description: str
 
@@ -54,20 +53,23 @@ class Subsection:
 
 @dataclass
 class Section:
-    """Represents a section in a Wikipedia-style outline."""
-
+    """Represents a section in a Wikipedia article."""
     section_title: str
     description: str
     subsections: Optional[List[Subsection]] = None
+    citations: List[str] = field(default_factory=list)
 
     @property
     def as_str(self) -> str:
         """Return a formatted string representation of the section."""
         subsections = "\n\n".join(
-            f"### {subsection.subsection_title}\n\n{subsection.description}"
-            for subsection in self.subsections or []
+            subsection.as_str for subsection in self.subsections or []
         )
-        return f"## {self.section_title}\n\n{self.description}\n\n{subsections}".strip()
+        citations = "\n".join([f"[{i+1}] {cit}" for i, cit in enumerate(self.citations)])
+        return (
+            f"## {self.section_title}\n\n{self.description}\n\n{subsections}".strip()
+            + f"\n\n{citations}".strip()
+        )
 
 
 @dataclass
@@ -100,6 +102,8 @@ class State(InputState):
     outline: Optional[Outline] = field(default=None)
     related_topics: Optional[RelatedTopics] = field(default=None)
     perspectives: Optional[Perspectives] = field(default=None)
+    article: Optional[str] = field(default=None)
+    references: Annotated[Optional[dict], field(default=None)] = None
 
 
 @dataclass

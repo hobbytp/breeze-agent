@@ -80,3 +80,25 @@ Old outline:
         "Refine the outline based on your conversations with subject-matter experts:\n\nConversations:\n\n{conversations}\n\nWrite the refined Wikipedia outline:",
     ),
 ])
+
+SECTION_WRITER_PROMPT = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are an expert Wikipedia writer. Complete your assigned WikiSection from the following outline:\n\n
+{outline}\n\nCite your sources, using the following references:\n\n<Documents>\n{docs}\n</Documents>""",
+    ),
+    ("user", "Write the full WikiSection for the {section} section. Include both the section description and any subsection descriptions."),
+])
+
+ARTICLE_WRITER_PROMPT = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are an expert Wikipedia author. Write the complete wiki article on {topic} using the following section drafts:\n\n
+{draft}\n\nStrictly follow Wikipedia format guidelines.""",
+    ),
+    (
+        "user",
+        'Write the complete Wiki article using markdown format. Organize citations using footnotes like "[1]",'
+        " avoiding duplicates in the footer. Include URLs in the footer.",
+    ),
+])
