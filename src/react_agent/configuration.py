@@ -30,6 +30,22 @@ class Configuration:
         },
     )
 
+    fast_llm_model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
+        default="openai/gpt-4-turbo-preview",
+        metadata={
+            "description": "The name of the fast language model to use for simpler tasks. "
+            "Should be in the form: provider/model-name."
+        },
+    )
+
+    long_context_model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
+        default="openai/gpt-4-turbo-preview",
+        metadata={
+            "description": "The name of the language model to use for tasks requiring longer context. "
+            "Should be in the form: provider/model-name."
+        },
+    )
+
     max_search_results: int = field(
         default=10,
         metadata={
