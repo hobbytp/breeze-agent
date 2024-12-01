@@ -109,4 +109,7 @@ class InterviewState:
     messages: Annotated[List[AnyMessage], add_messages] = field(default_factory=list)
     references: Annotated[Optional[dict], field(default=None)] = None
     editor: Annotated[Optional[Editor], field(default=None)] = None
+    editors: List[Editor] = field(default_factory=list)
+    current_editor_index: int = field(default=0)
+    is_complete: bool = field(default=False)
     perspectives: Optional[Perspectives] = field(default=None)
