@@ -48,7 +48,7 @@ async def generate_outline(
         raise ValueError("No user message found in state")
 
     # Create the chain for outline generation with structured output
-    chain = OUTLINE_PROMPT | model.bind_tools([Outline])
+    chain = OUTLINE_PROMPT | model.with_structured_output(Outline)
 
     # Generate the outline
     response = await chain.ainvoke({"topic": last_user_message.content}, config)

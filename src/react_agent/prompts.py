@@ -63,3 +63,20 @@ Each response must be backed up by a citation from a reliable source, formatted 
         MessagesPlaceholder(variable_name="messages", optional=True),
     ]
 )
+
+REFINE_OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are a Wikipedia writer. You have gathered information from experts and search engines. Now, you are refining the outline of the Wikipedia page. \
+You need to make sure that the outline is comprehensive and specific. \
+Topic you are writing about: {topic} 
+
+Old outline:
+
+{old_outline}""",
+    ),
+    (
+        "user",
+        "Refine the outline based on your conversations with subject-matter experts:\n\nConversations:\n\n{conversations}\n\nWrite the refined Wikipedia outline:",
+    ),
+])
