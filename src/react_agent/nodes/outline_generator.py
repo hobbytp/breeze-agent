@@ -25,35 +25,19 @@ OUTLINE_PROMPT = ChatPromptTemplate.from_messages(
 async def generate_outline(
     state: State, config: RunnableConfig
 ) -> Dict[str, List[AIMessage]]:
-    """Generate a Wikipedia-style outline for a given topic.
-
-    Args:
-        state (State): The current state of the conversation.
-        config (RunnableConfig): Configuration for the model run.
-
-    Returns:
-        dict: A dictionary containing the model's response message and the generated outline.
-    """
+    """Generate a Wikipedia-style outline for a given topic."""
     configuration = Configuration.from_runnable_config(config)
-
-    # Initialize the fast LLM for outline generation
     model = load_chat_model(configuration.fast_llm_model)
-
-    # Get the topic from the last user message
-    last_user_message = next(
-        (msg for msg in reversed(state.messages) if msg.type == "human"),
-        None,
-    )
-    if not last_user_message:
-        raise ValueError("No user message found in state")
+    
+    # Use the validated topic from state
+    if not state.topic["is_valid"] or not state.topic["topic"]:
+        raise ValueError("No valid topic found in state")
 
     # Create the chain for outline generation with structured output
     chain = OUTLINE_PROMPT | model.with_structured_output(Outline)
 
-    # Generate the outline
-    response = await chain.ainvoke({"topic": last_user_message.content}, config)
-    # Create a response message
-   
+    # Generate the outline using the validated topic
+    response = await chain.ainvoke({"topic": state.topic["topic"]}, config)
 
     return {
         "outline": response,

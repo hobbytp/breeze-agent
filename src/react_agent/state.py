@@ -92,7 +92,16 @@ class InputState:
 
     messages: Annotated[Sequence[AnyMessage], add_messages] = field(default_factory=list)
 
+@dataclass
+class TopicValidation:
+    """Structured output for topic validation."""
+    is_valid: bool = False
+    topic: Optional[str] = None
+    message: Optional[str] = None
 
+def default_topic_validation() -> TopicValidation:
+    """Create a default TopicValidation instance."""
+    return TopicValidation(is_valid=False)
 
 @dataclass
 class State(InputState):
@@ -104,7 +113,7 @@ class State(InputState):
     perspectives: Optional[Perspectives] = field(default=None)
     article: Optional[str] = field(default=None)
     references: Annotated[Optional[dict], field(default=None)] = None
-
+    topic: TopicValidation = field(default_factory=default_topic_validation)
 
 @dataclass
 class InterviewState:
