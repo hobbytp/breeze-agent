@@ -11,6 +11,7 @@ from react_agent.configuration import Configuration
 from react_agent.state import InterviewState, Editor, State
 from react_agent.prompts import INTERVIEW_QUESTION_PROMPT, INTERVIEW_ANSWER_PROMPT
 from react_agent.utils import load_chat_model
+from react_agent.nodes.answer_generator import create_answer_graph
 
 MAX_TURNS = 3
 EXPERT_NAME = "expert"
@@ -64,6 +65,8 @@ async def generate_question(state: InterviewState, config: RunnableConfig):
         editors=state.editors,
         current_editor_index=state.current_editor_index
     )
+
+answer_graph = create_answer_graph()
 
 async def generate_answer(state: InterviewState, config: RunnableConfig):
     """Generate an answer from the expert's perspective."""
@@ -219,8 +222,8 @@ def create_interview_graph() -> StateGraph:
         retry=RetryPolicy(max_attempts=5)
     )
     builder.add_node(
-        "answer_question", 
-        generate_answer, 
+        "answer_question",
+        answer_graph,
         retry=RetryPolicy(max_attempts=5)
     )
     builder.add_node("next_editor", next_editor)
