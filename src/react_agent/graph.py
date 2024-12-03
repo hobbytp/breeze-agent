@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph
 
 from react_agent.configuration import Configuration
-from react_agent.state import InputState, State
+from react_agent.state import InputState, State, OutputState
 from react_agent.nodes.outline_generator import generate_outline
 from react_agent.nodes.topic_expander import expand_topics
 from react_agent.nodes.perspectives_generator import generate_perspectives
@@ -23,7 +23,7 @@ def should_continue(state: State) -> bool:
     return state.topic['is_valid']
 
 # Define a new graph
-builder = StateGraph(State, input=InputState, config_schema=Configuration)
+builder = StateGraph(State, input=InputState, output=OutputState, config_schema=Configuration)
 
 # Add nodes
 builder.add_node("validate_topic", validate_topic)
