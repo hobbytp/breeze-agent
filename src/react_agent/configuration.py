@@ -22,16 +22,8 @@ class Configuration:
         },
     )
 
-    model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
-        default="anthropic/claude-3-5-sonnet-20240620",
-        metadata={
-            "description": "The name of the language model to use for the agent's main interactions. "
-            "Should be in the form: provider/model-name."
-        },
-    )
-
     fast_llm_model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
-        default="openai/gpt-4-turbo-preview",
+        default="anthropic/claude-3-5-haiku-20241022",
         metadata={
             "description": "The name of the fast language model to use for simpler tasks. "
             "Should be in the form: provider/model-name."
@@ -39,7 +31,7 @@ class Configuration:
     )
 
     long_context_model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
-        default="openai/gpt-4-turbo-preview",
+        default="anthropic/claude-3-5-sonnet-20241022",
         metadata={
             "description": "The name of the language model to use for tasks requiring longer context. "
             "Should be in the form: provider/model-name."

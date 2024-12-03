@@ -53,8 +53,14 @@ async def search_for_context(state: InterviewState, config: RunnableConfig) -> I
     # Store results in references
     if search_results:
         references = state.references or {}
+        # Handle search results whether they're strings or dictionaries
         for result in search_results:
-            references[result["url"]] = result["content"]
+            if isinstance(result, dict):
+                # Handle dictionary format
+                references[result.get("url", "unknown")] = result.get("content", "")
+            elif isinstance(result, str):
+                # Handle string format
+                references[f"source_{len(references)}"] = result
             
         return InterviewState(
             messages=state.messages,
