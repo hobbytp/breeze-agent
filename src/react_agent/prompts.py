@@ -6,6 +6,27 @@ SYSTEM_PROMPT = """You are a helpful AI assistant.
 
 System time: {system_time}"""
 
+TOPIC_VALIDATOR_PROMPT = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are a helpful assistant whose job is to ensure the user provides a clear topic for research.
+        Analyze the user's input and determine if it contains a clear research topic.
+        
+        Example valid topics:
+        - "Artificial Intelligence"
+        - "The French Revolution"
+        - "Quantum Computing"
+        
+        Return a structured response with:
+        - is_valid: true if a clear topic is provided, false otherwise
+        - topic: the extracted topic if valid, null otherwise
+        - message: a helpful message if the input is invalid, null otherwise
+        
+        For invalid inputs or small talk, provide a polite message asking for a specific topic."""
+    ),
+    ("user", "{input}"),
+])
+
 RELATED_TOPICS_PROMPT = ChatPromptTemplate.from_template(
     """I'm writing a Wikipedia page for a topic mentioned below. Please identify and recommend some Wikipedia pages on closely related subjects. I'm looking for examples that provide insights into interesting aspects commonly associated with this topic, or examples that help me understand the typical content and structure included in Wikipedia pages for similar topics.
 
@@ -101,4 +122,12 @@ ARTICLE_WRITER_PROMPT = ChatPromptTemplate.from_messages([
         'Write the complete Wiki article using markdown format. Organize citations using footnotes like "[1]",'
         " avoiding duplicates in the footer. Include URLs in the footer.",
     ),
+])
+
+OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        "You are a Wikipedia writer. Write an outline for a Wikipedia page about a user-provided topic. Be comprehensive and specific.",
+    ),
+    ("user", "{topic}"),
 ])

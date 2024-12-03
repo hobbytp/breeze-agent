@@ -11,19 +11,10 @@ from react_agent.state import State, RelatedTopics
 from react_agent.utils import load_chat_model
 from react_agent.prompts import RELATED_TOPICS_PROMPT
 
-
 async def expand_topics(
     state: State, config: RunnableConfig
 ) -> Dict[str, RelatedTopics]:
-    """Expand a topic with related subjects.
-
-    Args:
-        state (State): The current state of the conversation.
-        config (RunnableConfig): Configuration for the model run.
-
-    Returns:
-        dict: A dictionary containing the related topics.
-    """
+    """Expand a topic with related subjects."""
     configuration = Configuration.from_runnable_config(config)
 
     # Initialize the fast LLM for topic expansion

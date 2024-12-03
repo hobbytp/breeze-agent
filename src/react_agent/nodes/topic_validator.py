@@ -1,33 +1,12 @@
 """Node for validating and extracting the topic from user input."""
 
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableConfig
 from typing import Dict
 
 from react_agent.configuration import Configuration
 from react_agent.state import State, TopicValidation
 from react_agent.utils import load_chat_model
-
-TOPIC_VALIDATOR_PROMPT = ChatPromptTemplate.from_messages([
-    (
-        "system",
-        """You are a helpful assistant whose job is to ensure the user provides a clear topic for research.
-        Analyze the user's input and determine if it contains a clear research topic.
-        
-        Example valid topics:
-        - "Artificial Intelligence"
-        - "The French Revolution"
-        - "Quantum Computing"
-        
-        Return a structured response with:
-        - is_valid: true if a clear topic is provided, false otherwise
-        - topic: the extracted topic if valid, null otherwise
-        - message: a helpful message if the input is invalid, null otherwise
-        
-        For invalid inputs or small talk, provide a polite message asking for a specific topic."""
-    ),
-    ("user", "{input}"),
-])
+from react_agent.prompts import TOPIC_VALIDATOR_PROMPT
 
 async def validate_topic(state: State, config: RunnableConfig) -> Dict:
     """Validate and extract the topic from user input."""
@@ -52,7 +31,6 @@ async def validate_topic(state: State, config: RunnableConfig) -> Dict:
     message = []
     if not response['is_valid']:
         message = response['message']
-
     
     return {
         "topic": response,
