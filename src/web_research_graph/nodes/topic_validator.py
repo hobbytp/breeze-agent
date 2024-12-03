@@ -3,10 +3,10 @@
 from langchain_core.runnables import RunnableConfig
 from typing import Dict
 
-from react_agent.configuration import Configuration
-from react_agent.state import State, TopicValidation
-from react_agent.utils import load_chat_model
-from react_agent.prompts import TOPIC_VALIDATOR_PROMPT
+from web_research_graph.configuration import Configuration
+from web_research_graph.state import State, TopicValidation
+from web_research_graph.utils import load_chat_model
+from web_research_graph.prompts import TOPIC_VALIDATOR_PROMPT
 
 async def validate_topic(state: State, config: RunnableConfig) -> Dict:
     """Validate and extract the topic from user input."""

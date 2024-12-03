@@ -1,4 +1,4 @@
-"""This module provides example tools for web scraping and search functionality.
+"""This module provides tools for web scraping and search functionality.
 
 It includes a basic Tavily search function (as an example)
 
@@ -13,7 +13,7 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import InjectedToolArg
 from typing_extensions import Annotated
 
-from react_agent.configuration import Configuration
+from web_research_graph.configuration import Configuration
 
 
 async def search(

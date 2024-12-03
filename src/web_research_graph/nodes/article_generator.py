@@ -6,10 +6,10 @@ from langchain_community.vectorstores import InMemoryVectorStore
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 
-from react_agent.configuration import Configuration
-from react_agent.state import State, Section, Outline
-from react_agent.utils import load_chat_model, get_message_text, dict_to_outline, dict_to_section
-from react_agent.prompts import SECTION_WRITER_PROMPT, ARTICLE_WRITER_PROMPT
+from web_research_graph.configuration import Configuration
+from web_research_graph.state import State, Section, Outline
+from web_research_graph.utils import load_chat_model, get_message_text, dict_to_outline, dict_to_section
+from web_research_graph.prompts import SECTION_WRITER_PROMPT, ARTICLE_WRITER_PROMPT
 
 async def create_retriever(references: dict):
     """Create a retriever from the reference documents."""

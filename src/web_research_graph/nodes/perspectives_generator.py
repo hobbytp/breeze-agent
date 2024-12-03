@@ -5,10 +5,10 @@ from typing import Dict, List
 from langchain_community.retrievers import WikipediaRetriever
 from langchain_core.runnables import RunnableConfig
 
-from react_agent.configuration import Configuration
-from react_agent.state import State, Perspectives
-from react_agent.utils import load_chat_model
-from react_agent.prompts import PERSPECTIVES_PROMPT
+from web_research_graph.configuration import Configuration
+from web_research_graph.state import State, Perspectives
+from web_research_graph.utils import load_chat_model
+from web_research_graph.prompts import PERSPECTIVES_PROMPT
 
 
 def format_doc(doc, max_length=1000) -> str:

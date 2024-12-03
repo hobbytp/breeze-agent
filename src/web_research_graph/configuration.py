@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 
 from langchain_core.runnables import RunnableConfig, ensure_config
 
-from react_agent import prompts
+from web_research_graph import prompts
 
 
 @dataclass(kw_only=True)

@@ -3,10 +3,10 @@
 from typing import Optional, Dict, Any
 from langchain_core.runnables import RunnableConfig
 
-from react_agent.configuration import Configuration
-from react_agent.state import State, Outline, Section, Subsection
-from react_agent.utils import load_chat_model, get_message_text, dict_to_outline
-from react_agent.prompts import REFINE_OUTLINE_PROMPT
+from web_research_graph.configuration import Configuration
+from web_research_graph.state import State, Outline, Section, Subsection
+from web_research_graph.utils import load_chat_model, get_message_text, dict_to_outline
+from web_research_graph.prompts import REFINE_OUTLINE_PROMPT
 
 async def refine_outline(
     state: State, 

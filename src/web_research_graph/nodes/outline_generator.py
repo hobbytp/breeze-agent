@@ -4,10 +4,10 @@ from typing import Dict, List
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableConfig
 
-from react_agent.configuration import Configuration
-from react_agent.prompts import OUTLINE_PROMPT
-from react_agent.state import Outline, State
-from react_agent.utils import load_chat_model
+from web_research_graph.configuration import Configuration
+from web_research_graph.prompts import OUTLINE_PROMPT
+from web_research_graph.state import Outline, State
+from web_research_graph.utils import load_chat_model
 
 async def generate_outline(
     state: State, config: RunnableConfig

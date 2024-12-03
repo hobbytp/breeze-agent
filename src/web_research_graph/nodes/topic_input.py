@@ -4,7 +4,7 @@ from typing import Dict
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableConfig
 
-from react_agent.state import State
+from web_research_graph.state import State
 
 async def request_topic(state: State, _: RunnableConfig) -> Dict:
     """Request a new topic from the user."""
