@@ -25,15 +25,8 @@ def format_docs(docs) -> str:
 async def generate_perspectives(
     state: State, config: RunnableConfig
 ) -> Dict[str, Perspectives]:
-    """Generate diverse editorial perspectives based on related topics.
+    """Generate diverse editorial perspectives based on related topics."""
 
-    Args:
-        state (State): The current state of the conversation.
-        config (RunnableConfig): Configuration for the model run.
-
-    Returns:
-        dict: A dictionary containing the generated perspectives.
-    """
     configuration = Configuration.from_runnable_config(config)
 
     # Initialize the Wikipedia retriever
@@ -43,8 +36,6 @@ async def generate_perspectives(
     if not state.related_topics:
         raise ValueError("No related topics found in state")
     
-    print('Related topics:', state.related_topics)
-
     # Retrieve Wikipedia documents for each topic
     retrieved_docs = await wikipedia_retriever.abatch(
         state.related_topics,
