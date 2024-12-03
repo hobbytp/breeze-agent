@@ -93,6 +93,12 @@ class InputState:
     messages: Annotated[Sequence[AnyMessage], add_messages] = field(default_factory=list)
 
 @dataclass
+class OutputState:
+    """Defines the output state for the agent."""
+
+    article: Optional[str] = field(default=None)
+
+@dataclass
 class TopicValidation:
     """Structured output for topic validation."""
     is_valid: bool = False
@@ -104,7 +110,7 @@ def default_topic_validation() -> TopicValidation:
     return TopicValidation(is_valid=False)
 
 @dataclass
-class State(InputState):
+class State(InputState, OutputState):
     """Represents the complete state of the agent."""
 
     is_last_step: IsLastStep = field(default=False)
