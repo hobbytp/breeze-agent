@@ -43,7 +43,6 @@ async def generate_expert_answer(state: InterviewState, config: RunnableConfig) 
     
     if not content:
         return state
-        
     
     return InterviewState(
         messages=state.messages + [AIMessage(content=content, name=EXPERT_NAME)],

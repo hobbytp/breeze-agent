@@ -49,8 +49,7 @@ def route_messages(state: InterviewState) -> str:
                 last_message.content.endswith("Thank you so much for your help!")):
                 return "next_editor"
                 
-            # Otherwise, try to get expert's response again
-            return "ask_question"
+            return "next_editor"
     
     # If we're just starting, ask a question
     return "ask_question" 
