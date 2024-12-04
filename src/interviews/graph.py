@@ -6,9 +6,9 @@ from langgraph.pregel import RetryPolicy
 from web_research_graph.state import InterviewState
 from interviews.nodes.initialize import initialize_interview
 from interviews.nodes.question import generate_question
-from interviews.nodes.answer import generate_answer
 from interviews.nodes.next_editor import next_editor
-from interviews.utils import route_messages
+from interviews.router import route_messages
+from answers.graph import answer_graph
 
 builder = StateGraph(InterviewState)
         
@@ -21,7 +21,7 @@ builder.add_node(
 )
 builder.add_node(
     "answer_question",
-    generate_answer,
+    answer_graph,
     retry=RetryPolicy(max_attempts=5)
 )
 builder.add_node("next_editor", next_editor)

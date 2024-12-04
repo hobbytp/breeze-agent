@@ -15,18 +15,14 @@ async def initialize_interview(state: State, config: RunnableConfig) -> Intervie
         raise ValueError("No perspectives found in state")
         
     perspectives = state.perspectives
-    if isinstance(perspectives, dict):
-        editors = perspectives.get("editors", [])
-    else:
-        editors = perspectives.editors
-        
+    editors = perspectives.get("editors", [])
+
     if not editors:
         raise ValueError("No editors found in perspectives")
     
-    # Convert editors to proper Editor objects if needed
+    # Convert editors to proper Editor objects
     editors_list = [
-        Editor(**editor) if isinstance(editor, dict) else editor 
-        for editor in editors
+        Editor(**editor)for editor in editors
     ]
     
     # Start with the first editor

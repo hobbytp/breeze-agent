@@ -12,6 +12,10 @@ EXPERT_NAME = "expert"
 
 async def generate_expert_answer(state: InterviewState, config: RunnableConfig) -> InterviewState:
     """Generate an expert answer using the gathered information."""
+    print("\n=== Debug: generate_expert_answer ===")
+    print(f"Messages count: {len(state.messages)}")
+    print(f"References count: {len(state.references or {})}")
+    
     configuration = Configuration.from_runnable_config(config)
     model = load_chat_model(configuration.fast_llm_model)
     
@@ -25,6 +29,9 @@ async def generate_expert_answer(state: InterviewState, config: RunnableConfig) 
             f"Source: {url}\nContent: {content}" 
             for url, content in state.references.items()
         )
+        print(f"References text length: {len(references_text)}")
+    else:
+        print("No references available")
     
     # Create the chain
     chain = INTERVIEW_ANSWER_PROMPT | model
@@ -39,6 +46,13 @@ async def generate_expert_answer(state: InterviewState, config: RunnableConfig) 
     )
     
     content = result.content if hasattr(result, 'content') else str(result)
+    print(f"Generated content length: {len(content)}")
+    
+    if not content:
+        print("Warning: Empty content generated, returning original state")
+        return state
+        
+    print("=== End Debug ===\n")
     
     return InterviewState(
         messages=state.messages + [AIMessage(content=content, name=EXPERT_NAME)],

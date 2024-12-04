@@ -6,7 +6,10 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage
 
 from web_research_graph.state import Outline, Section, Subsection
+import re
+from langchain_core.messages import AIMessage, HumanMessage
 
+from web_research_graph.state import InterviewState
 
 def get_message_text(msg: BaseMessage) -> str:
     """Get the text content of a message."""
@@ -67,4 +70,39 @@ def dict_to_section(section_dict: Dict[str, Any]) -> Section:
         description=section_dict["description"],
         subsections=subsections,
         citations=section_dict.get("citations", [])
+    )
+
+def sanitize_name(name: str) -> str:
+    """Convert a name to a valid format for the API."""
+    # Replace spaces and special chars with underscores, keep alphanumeric
+    sanitized = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
+    return sanitized
+
+def swap_roles(state: InterviewState, name: str):
+    """Convert messages to appropriate roles for the current speaker."""
+    print(f"\n=== Debug: swap_roles for {name} ===")
+    print(f"Initial messages count: {len(state.messages)}")
+    
+    converted = []
+    for i, message in enumerate(state.messages):
+        print(f"\nMessage {i}:")
+        print(f"  Type: {type(message)}")
+        print(f"  Name: {getattr(message, 'name', 'No name')}")
+        print(f"  Content: {repr(message.content)}")
+        
+        if isinstance(message, AIMessage) and message.name != name:
+            message = HumanMessage(**message.dict(exclude={"type"}))
+            print(f"  Converted to: {type(message)}")
+        
+        converted.append(message)
+        
+    print(f"\nFinal converted messages count: {len(converted)}")
+    print("=== End Debug ===\n")
+    
+    return InterviewState(
+        messages=converted, 
+        editor=state.editor,
+        references=state.references,
+        editors=state.editors,
+        current_editor_index=state.current_editor_index
     )

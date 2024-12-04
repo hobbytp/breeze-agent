@@ -71,19 +71,20 @@ Stay true to your specific perspective:
     ]
 )
 
-INTERVIEW_ANSWER_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """You are an expert who can use information effectively. You are chatting with a Wikipedia writer who wants\
- to write a Wikipedia page on the topic you know. You have gathered the related information and will now use the information to form a response.
+INTERVIEW_ANSWER_PROMPT = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are an expert who can use information effectively. You are chatting with a Wikipedia writer who wants\
+ to write a Wikipedia page on the topic you know. Use the provided references to form your response.
 
 Make your response as informative as possible and make sure every sentence is supported by the gathered information.
-Each response must be backed up by a citation from a reliable source, formatted as a footnote, reproducing the URLS after your response.""",
-        ),
-        MessagesPlaceholder(variable_name="messages", optional=True),
-    ]
-)
+Each response must be backed up by a citation from a reliable source, formatted as a footnote, reproducing the URLS after your response.
+
+References:
+{references}"""
+    ),
+    MessagesPlaceholder(variable_name="messages", optional=True),
+])
 
 REFINE_OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
     (

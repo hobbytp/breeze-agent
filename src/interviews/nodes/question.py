@@ -7,7 +7,7 @@ from web_research_graph.configuration import Configuration
 from web_research_graph.state import InterviewState
 from web_research_graph.prompts import INTERVIEW_QUESTION_PROMPT
 from web_research_graph.utils import load_chat_model
-from interviews.utils import sanitize_name, swap_roles
+from web_research_graph.utils import sanitize_name, swap_roles
 
 async def generate_question(state: InterviewState, config: RunnableConfig):
     """Generate a question from the editor's perspective."""
