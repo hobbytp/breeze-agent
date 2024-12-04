@@ -129,17 +129,21 @@ ARTICLE_WRITER_PROMPT = ChatPromptTemplate.from_messages([
         "system",
         """You are an expert Wikipedia author. Write the complete wiki article on {topic} using the following section drafts:\n\n
 {draft}\n\n
-IMPORTANT: Do NOT summarize or remove details from the section drafts. Your task is to:
-1. Piece together all section drafts into a cohesive article
-2. Make minor adjustments only for flow and transitions between sections
-3. Ensure all specific details, examples, and depth from the original drafts are preserved
-4. Maintain the comprehensive nature of each section while creating a unified whole
+CRITICAL REQUIREMENTS:
+1. You MUST write the COMPLETE article including ALL sections from the drafts
+2. Do NOT truncate, summarize, or skip any sections
+3. Do NOT use placeholders or "[Continue with...]" statements
+4. Write the article in its entirety, no matter how long
+5. Piece together all section drafts into a cohesive article
+6. Make minor adjustments only for flow and transitions between sections
+7. Ensure all specific details, examples, and depth from the original drafts are preserved
+8. Maintain the comprehensive nature of each section while creating a unified whole
 
 Strictly follow Wikipedia format guidelines.""",
     ),
     (
         "user",
-        'Write the complete Wiki article using markdown format. Organize citations using footnotes like "[1]",'
+        'Write the complete Wiki article using markdown format. Include ALL sections. Organize citations using footnotes like "[1]",'
         " avoiding duplicates in the footer. Include URLs in the footer.",
     ),
 ])

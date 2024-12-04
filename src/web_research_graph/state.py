@@ -56,7 +56,7 @@ class Section:
     """Represents a section in a Wikipedia article."""
     section_title: str
     description: str
-    subsections: Optional[List[Subsection]] = None
+    subsections: List[Subsection] = field(default_factory=list)
     citations: List[str] = field(default_factory=list)
 
     @property

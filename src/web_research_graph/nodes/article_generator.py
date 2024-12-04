@@ -88,9 +88,10 @@ async def generate_article(state: State, config: Optional[RunnableConfig] = None
     # Format all sections for final article generation
     draft = "\n\n".join(section.as_str for section in sections)
     
-    # Generate final article
+    # Generate final article with explicit completion requirement
     chain = ARTICLE_WRITER_PROMPT | model | (lambda x: x)  # Use string output
     
+    # Add a validation step to ensure all sections are present
     article = await chain.ainvoke(
         {
             "topic": current_outline.page_title,
@@ -98,6 +99,11 @@ async def generate_article(state: State, config: Optional[RunnableConfig] = None
         },
         config
     )
+    
+    # Validate that all sections are present in the generated article
+    for section in current_outline.sections:
+        if section.section_title.lower() not in article.lower():
+            raise ValueError(f"Generated article is incomplete. Missing section: {section.section_title}")
     
     # Update state with the generated article
     return State(
