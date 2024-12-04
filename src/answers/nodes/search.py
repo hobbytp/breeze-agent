@@ -29,7 +29,7 @@ async def search_for_context(state: InterviewState, config: RunnableConfig) -> I
         return state
     
     # Perform search
-    search_results = await search(last_question.content[:350], config=config)
+    search_results = await search(last_question.content, config=config)
         
     # Store results in references
     if search_results:

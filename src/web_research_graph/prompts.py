@@ -132,3 +132,12 @@ OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
     ),
     ("user", "{topic}"),
 ])
+
+QUERY_SUMMARIZATION_PROMPT = ChatPromptTemplate.from_template(
+    """Given a long search query, create a shorter, focused version that captures the main search intent in under 350 characters.
+Make the shortened query clear and specific enough to return relevant search results.
+
+Original query: {query}
+
+Shortened query:"""
+)
