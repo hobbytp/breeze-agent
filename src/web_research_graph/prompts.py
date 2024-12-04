@@ -93,6 +93,14 @@ REFINE_OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
 You need to make sure that the outline is comprehensive and specific. \
 Topic you are writing about: {topic} 
 
+IMPORTANT: Your output must include:
+1. The page title at the top level (# Title)
+2. All sections from the original outline (## Section)
+3. Section descriptions
+4. All subsections (### Subsection) with their descriptions
+
+Do not remove any sections or subsections, only enhance them with new information.
+
 Old outline:
 
 {old_outline}""",
