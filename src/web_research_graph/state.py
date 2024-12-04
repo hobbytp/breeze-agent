@@ -77,7 +77,7 @@ class Outline:
     """Represents a complete Wikipedia-style outline."""
 
     page_title: str
-    sections: List[Section] = field(default_factory=list)
+    sections: List[Section]
 
     @property
     def as_str(self) -> str:
