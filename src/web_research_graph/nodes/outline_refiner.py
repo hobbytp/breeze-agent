@@ -31,7 +31,7 @@ async def refine_outline(
     # Create the chain with structured output
     chain = REFINE_OUTLINE_PROMPT | model.with_structured_output(Outline)
     
-    # Generate refined outline
+    # Generate refined outline with explicit structure validation
     refined_outline = await chain.ainvoke(
         {
             "topic": current_outline.page_title,
@@ -40,6 +40,10 @@ async def refine_outline(
         },
         config
     )
+    
+    # Validate that the refined outline has sections
+    if not refined_outline.sections:
+        raise ValueError("Refined outline was generated without sections")
     
     # Return updated state with new outline
     return State(

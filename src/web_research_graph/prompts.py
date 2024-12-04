@@ -93,13 +93,17 @@ REFINE_OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
 You need to make sure that the outline is comprehensive and specific. \
 Topic you are writing about: {topic} 
 
-IMPORTANT: Your output must include:
-1. The page title at the top level (# Title)
-2. All sections from the original outline (## Section)
-3. Section descriptions
-4. All subsections (### Subsection) with their descriptions
+Your output must follow this structure:
+- page_title: The main topic title
+- sections: A list of sections where each section has:
+  - section_title: The section heading
+  - description: The section's main content
+  - subsections: A list of subsections (optional) where each has:
+    - subsection_title: The subsection heading
+    - description: The subsection's content
+  - citations: A list of citation URLs
 
-Do not remove any sections or subsections, only enhance them with new information.
+Use the old outline as a base, enhancing it with new information from the conversations. Do not remove existing sections or subsections.
 
 Old outline:
 
@@ -107,7 +111,7 @@ Old outline:
     ),
     (
         "user",
-        "Refine the outline based on your conversations with subject-matter experts:\n\nConversations:\n\n{conversations}\n\nWrite the refined Wikipedia outline:",
+        "Refine the outline based on your conversations with subject-matter experts:\n\nConversations:\n\n{conversations}\n\nProvide the refined outline following the required structure.",
     ),
 ])
 
