@@ -43,7 +43,7 @@ async def generate_section(
     )
     
     # Create the chain
-    model = load_chat_model(configuration.long_context_model)
+    model = load_chat_model(configuration.long_context_model, max_tokens=2000)
     chain = SECTION_WRITER_PROMPT | model.with_structured_output(Section)
     
     # Generate the section
@@ -62,7 +62,7 @@ async def generate_article(state: State, config: Optional[RunnableConfig] = None
         raise ValueError("No outline found in state")
         
     configuration = Configuration.from_runnable_config(config)
-    model = load_chat_model(configuration.long_context_model)
+    model = load_chat_model(configuration.long_context_model, max_tokens=4000)
     
     # Convert dictionary outline to Outline object if needed
     current_outline = state.outline if isinstance(state.outline, Outline) else dict_to_outline(state.outline)
