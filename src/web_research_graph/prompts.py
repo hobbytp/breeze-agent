@@ -147,9 +147,21 @@ Strictly follow Wikipedia format guidelines.""",
 OUTLINE_PROMPT = ChatPromptTemplate.from_messages([
     (
         "system",
-        "You are a Wikipedia writer. Write an outline for a Wikipedia page about a user-provided topic. Be comprehensive and specific.",
+        """You are a Wikipedia writer. Create a comprehensive outline for a Wikipedia page about the given topic.
+
+Your output must follow this structure:
+- page_title: The main topic title
+- sections: A list of sections where each section has:
+  - section_title: The section heading
+  - description: A detailed description of what the section will cover
+  - subsections: A list of subsections where each has:
+    - subsection_title: The subsection heading
+    - description: Detailed description of the subsection content
+  - citations: A list of citation URLs (can be empty for initial outline)
+
+Make sure to include at least 3-5 main sections with relevant subsections."""
     ),
-    ("user", "{topic}"),
+    ("user", "Create a Wikipedia outline for: {topic}"),
 ])
 
 QUERY_SUMMARIZATION_PROMPT = ChatPromptTemplate.from_template(

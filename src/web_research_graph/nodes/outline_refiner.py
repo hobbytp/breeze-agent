@@ -41,9 +41,21 @@ async def refine_outline(
         config
     )
     
-    # Validate that the refined outline has sections
+    # If we got a dict instead of an Outline object, convert it
+    if not isinstance(refined_outline, Outline):
+        refined_outline = dict_to_outline(refined_outline)
+    
+    # Ensure we maintain the structure
     if not refined_outline.sections:
-        raise ValueError("Refined outline was generated without sections")
+        # If no sections, copy the sections from the current outline
+        refined_outline.sections = current_outline.sections
+    elif len(refined_outline.sections) < len(current_outline.sections):
+        # If we lost sections, merge with original
+        existing_sections = {s.section_title: s for s in current_outline.sections}
+        refined_sections = {s.section_title: s for s in refined_outline.sections}
+        # Update existing sections with refined ones, keeping any that weren't refined
+        existing_sections.update(refined_sections)
+        refined_outline.sections = list(existing_sections.values())
     
     # Return updated state with new outline
     return State(
