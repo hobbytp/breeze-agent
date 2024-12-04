@@ -80,24 +80,14 @@ def sanitize_name(name: str) -> str:
 
 def swap_roles(state: InterviewState, name: str):
     """Convert messages to appropriate roles for the current speaker."""
-    print(f"\n=== Debug: swap_roles for {name} ===")
-    print(f"Initial messages count: {len(state.messages)}")
     
     converted = []
     for i, message in enumerate(state.messages):
-        print(f"\nMessage {i}:")
-        print(f"  Type: {type(message)}")
-        print(f"  Name: {getattr(message, 'name', 'No name')}")
-        print(f"  Content: {repr(message.content)}")
         
         if isinstance(message, AIMessage) and message.name != name:
             message = HumanMessage(**message.dict(exclude={"type"}))
-            print(f"  Converted to: {type(message)}")
         
         converted.append(message)
-        
-    print(f"\nFinal converted messages count: {len(converted)}")
-    print("=== End Debug ===\n")
     
     return InterviewState(
         messages=converted, 
