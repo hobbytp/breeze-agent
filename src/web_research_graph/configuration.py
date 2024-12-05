@@ -30,6 +30,14 @@ class Configuration:
         },
     )
 
+    tool_model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
+        default="openai/gpt-4o-mini",
+        metadata={
+            "description": "The name of the fast language model to use for simpler tasks. "
+            "Should be in the form: provider/model-name."
+        },
+    )
+
     long_context_model: Annotated[str, {"__template_metadata__": {"kind": "llm"}}] = field(
         default="anthropic/claude-3-5-sonnet-20241022",
         metadata={
@@ -37,6 +45,8 @@ class Configuration:
             "Should be in the form: provider/model-name."
         },
     )
+
+    
 
     max_search_results: int = field(
         default=10,

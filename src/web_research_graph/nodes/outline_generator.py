@@ -14,7 +14,7 @@ async def generate_outline(
 ) -> Dict[str, List[AIMessage]]:
     """Generate a Wikipedia-style outline for a given topic."""
     configuration = Configuration.from_runnable_config(config)
-    model = load_chat_model(configuration.fast_llm_model)
+    model = load_chat_model(configuration.tool_model)
     
     # Use the validated topic from state
     if not state.topic["is_valid"] or not state.topic["topic"]:

@@ -14,7 +14,7 @@ async def refine_outline(
 ) -> State:
     """Refine the outline based on interview results."""
     configuration = Configuration.from_runnable_config(config)
-    model = load_chat_model(configuration.fast_llm_model)
+    model = load_chat_model(configuration.tool_model)
     
     if not state.outline:
         raise ValueError("No initial outline found in state")
