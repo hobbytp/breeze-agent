@@ -1,11 +1,11 @@
 """Node for refining the outline based on interview results."""
 
-from typing import Optional, Dict, Any
+from typing import Optional
 from langchain_core.runnables import RunnableConfig
 
 from web_research_graph.configuration import Configuration
-from web_research_graph.state import State, Outline, Section, Subsection
-from web_research_graph.utils import load_chat_model, get_message_text, dict_to_outline
+from web_research_graph.state import State, Outline
+from web_research_graph.utils import load_chat_model, get_message_text
 from web_research_graph.prompts import REFINE_OUTLINE_PROMPT
 
 async def refine_outline(
@@ -18,9 +18,8 @@ async def refine_outline(
     
     if not state.outline:
         raise ValueError("No initial outline found in state")
-        
-    # Convert dictionary outline to Outline object if needed
-    current_outline = state.outline if isinstance(state.outline, Outline) else dict_to_outline(state.outline)
+   
+    current_outline = state.outline
         
     # Format conversations from the state's messages
     conversations = "\n\n".join(
@@ -40,10 +39,6 @@ async def refine_outline(
         },
         config
     )
-    
-    # If we got a dict instead of an Outline object, convert it
-    if not isinstance(refined_outline, Outline):
-        refined_outline = dict_to_outline(refined_outline)
     
     # Ensure we maintain the structure
     if not refined_outline.sections:

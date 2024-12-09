@@ -38,8 +38,8 @@ packages = [
 [tool.setuptools.package-dir]
 "langgraph.templates.web_research_graph" = "src/web_research_graph"
 "web_research_graph" = "src/web_research_graph"
-"interviews" = "src/interviews"
-"answers" = "src/answers"
+"interviews" = "src/web_research_graph.interviews"
+"answers" = "src/web_research_graph.interviews.answers"
 
 
 [tool.setuptools.package-data]

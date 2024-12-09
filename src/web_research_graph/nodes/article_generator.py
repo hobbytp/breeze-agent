@@ -8,7 +8,7 @@ from langchain_openai import OpenAIEmbeddings
 
 from web_research_graph.configuration import Configuration
 from web_research_graph.state import State, Section, Outline
-from web_research_graph.utils import load_chat_model, get_message_text, dict_to_outline, dict_to_section
+from web_research_graph.utils import load_chat_model, get_message_text, dict_to_section
 from web_research_graph.prompts import SECTION_WRITER_PROMPT, ARTICLE_WRITER_PROMPT
 
 async def create_retriever(references: dict):
@@ -65,7 +65,7 @@ async def generate_article(state: State, config: Optional[RunnableConfig] = None
     model = load_chat_model(configuration.long_context_model, max_tokens=4000)
     
     # Convert dictionary outline to Outline object if needed
-    current_outline = state.outline if isinstance(state.outline, Outline) else dict_to_outline(state.outline)
+    current_outline = state.outline
     
     # Create retriever from references in state
     retriever = await create_retriever(state.references)

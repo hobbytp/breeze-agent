@@ -17,14 +17,14 @@ async def generate_outline(
     model = load_chat_model(configuration.tool_model)
     
     # Use the validated topic from state
-    if not state.topic["is_valid"] or not state.topic["topic"]:
+    if not state.topic.is_valid or not state.topic.topic:
         raise ValueError("No valid topic found in state")
 
     # Create the chain for outline generation with structured output
     chain = OUTLINE_PROMPT | model.with_structured_output(Outline)
 
     # Generate the outline using the validated topic
-    response = await chain.ainvoke({"topic": state.topic["topic"]}, config)
+    response = await chain.ainvoke({"topic": state.topic.topic}, config)
 
     return {
         "outline": response,

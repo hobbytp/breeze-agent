@@ -29,7 +29,7 @@ async def validate_topic(state: State, config: RunnableConfig) -> Dict:
     )
 
     message = []
-    if not response['is_valid']:
+    if not response.is_valid:
         message = response['message']
     
     return {

@@ -36,30 +36,6 @@ def load_chat_model(fully_specified_name: str, max_tokens: Optional[int] = None)
         kwargs["max_tokens"] = max_tokens
     return init_chat_model(model, model_provider=provider, **kwargs)
 
-
-def dict_to_outline(outline_dict: Dict[str, Any]) -> Outline:
-    """Convert a dictionary to an Outline object."""
-    sections = []
-    for section_data in outline_dict.get("sections", []):
-        subsections = []
-        for subsection_data in section_data.get("subsections", []) or []:
-            subsections.append(Subsection(
-                subsection_title=subsection_data["subsection_title"],
-                description=subsection_data["description"]
-            ))
-        
-        sections.append(Section(
-            section_title=section_data["section_title"],
-            description=section_data["description"],
-            subsections=subsections
-        ))
-    
-    return Outline(
-        page_title=outline_dict["page_title"],
-        sections=sections
-    )
-
-
 def dict_to_section(section_dict: Dict[str, Any]) -> Section:
     """Convert a dictionary to a Section object."""
     subsections = []

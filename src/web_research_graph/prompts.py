@@ -143,7 +143,7 @@ Strictly follow Wikipedia format guidelines.""",
     ),
     (
         "user",
-        'Write the complete Wiki article using markdown format. Include ALL sections. Organize citations using footnotes like "[1]",'
+        'Write the COMPLETE Wiki article using markdown format. Include ALL sections. Organize citations using footnotes like "[1]",'
         " avoiding duplicates in the footer. Include URLs in the footer.",
     ),
 ])

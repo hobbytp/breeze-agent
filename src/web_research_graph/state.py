@@ -8,6 +8,7 @@ from typing import List, Optional, Sequence
 from langchain_core.messages import AnyMessage
 from langgraph.graph import add_messages
 from langgraph.managed import IsLastStep
+from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
 
@@ -33,17 +34,23 @@ class Perspectives:
     editors: List[Editor] = field(default_factory=list)
 
 
-@dataclass
-class RelatedTopics:
+class RelatedTopics(BaseModel):
     """Represents related topics for research."""
-    topics: List[str] = field(default_factory=list)
+    
+    topics: List[str] = Field(
+        description="List of related topics that are relevant to the main research subject"
+    )
 
 
-@dataclass
-class Subsection:
+class Subsection(BaseModel):
     """Represents a subsection in a Wikipedia article."""
-    subsection_title: str
-    description: str
+    
+    subsection_title: str = Field(
+        description="The title of the subsection"
+    )
+    description: str = Field(
+        description="The detailed content of the subsection"
+    )
 
     @property
     def as_str(self) -> str:
@@ -51,13 +58,22 @@ class Subsection:
         return f"### {self.subsection_title}\n\n{self.description}".strip()
 
 
-@dataclass
-class Section:
+class Section(BaseModel):
     """Represents a section in a Wikipedia article."""
-    section_title: str
-    description: str
-    subsections: List[Subsection]
-    citations: List[str] = field(default_factory=list)
+    
+    section_title: str = Field(
+        description="The title of the section"
+    )
+    description: str = Field(
+        description="The main content/summary of the section"
+    )
+    subsections: List[Subsection] = Field(
+        description="List of subsections within this section"
+    )
+    citations: List[str] = Field(
+        default_factory=list,
+        description="List of citations supporting the section content"
+    )
 
     @property
     def as_str(self) -> str:
@@ -72,12 +88,15 @@ class Section:
         )
 
 
-@dataclass
-class Outline:
+class Outline(BaseModel):
     """Represents a complete Wikipedia-style outline."""
 
-    page_title: str
-    sections: List[Section]
+    page_title: str = Field(
+        description="The main title of the Wikipedia article"
+    )
+    sections: List[Section] = Field(
+        description="List of sections that make up the article"
+    )
 
     @property
     def as_str(self) -> str:
@@ -98,16 +117,22 @@ class OutputState:
 
     article: Optional[str] = field(default=None)
 
-@dataclass
-class TopicValidation:
+class TopicValidation(BaseModel):
     """Structured output for topic validation."""
-    is_valid: bool = False
-    topic: Optional[str] = None
-    message: Optional[str] = None
+    
+    is_valid: bool = Field(
+        description="Indicates whether the topic is valid for article generation"
+    )
+    topic: Optional[str] = Field(
+        description="The validated and possibly reformulated topic"
+    )
+    message: Optional[str] = Field(
+        description="Feedback message about the topic validation result"
+    )
 
 def default_topic_validation() -> TopicValidation:
     """Create a default TopicValidation instance."""
-    return TopicValidation(is_valid=False)
+    return TopicValidation(is_valid=False, topic=None, message=None)
 
 @dataclass
 class State(InputState, OutputState):

@@ -4,7 +4,7 @@ from langgraph.graph import StateGraph, START, END
 
 from web_research_graph.configuration import Configuration
 from web_research_graph.nodes.article_generator import generate_article
-from interviews.graph import interview_graph
+from web_research_graph.interviews_graph.graph import interview_graph
 from web_research_graph.nodes.outline_generator import generate_outline
 from web_research_graph.nodes.outline_refiner import refine_outline
 from web_research_graph.nodes.perspectives_generator import generate_perspectives
@@ -15,7 +15,7 @@ from web_research_graph.state import InputState, OutputState, State
 
 def should_continue(state: State) -> bool:
     """Determine if the graph should continue to the next node."""
-    return state.topic['is_valid']
+    return state.topic.is_valid
 
 builder = StateGraph(State, input=InputState, output=OutputState, config_schema=Configuration)
 
