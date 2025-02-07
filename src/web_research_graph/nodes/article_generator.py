@@ -88,17 +88,6 @@ async def generate_article(state: State, config: Optional[RunnableConfig] = None
     # Format all sections for final article generation
     draft = "\n\n".join(section.as_str for section in sections)
     
-    # Generate final article
-    chain = ARTICLE_WRITER_PROMPT | model | (lambda x: x)  # Use string output
-    
-    article = await chain.ainvoke(
-        {
-            "topic": current_outline.page_title,
-            "draft": draft,
-        },
-        config
-    )
-    
     # Update state with the generated article
     return State(
         messages=state.messages,
@@ -106,6 +95,8 @@ async def generate_article(state: State, config: Optional[RunnableConfig] = None
         related_topics=state.related_topics,
         perspectives=state.perspectives,
         is_last_step=True,
-        article=article,
+        article=draft,
         references=state.references
     ) 
+
+

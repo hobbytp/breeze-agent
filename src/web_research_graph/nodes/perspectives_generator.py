@@ -38,7 +38,7 @@ async def generate_perspectives(
     
     # Retrieve Wikipedia documents for each topic
     retrieved_docs = await wikipedia_retriever.abatch(
-        state.related_topics,
+        state.related_topics.dict(),
         return_exceptions=True
     )
     
