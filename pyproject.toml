@@ -1,9 +1,9 @@
 [project]
 name = "web-research-graph"
-version = "0.0.1"
+version = "0.0.5"
 description = "A LangGraph-based workflow for conducting web research and generating structured content."
 authors = [
-    { name = "William Fu-Hinthorn", email = "13333726+hinthornw@users.noreply.github.com" },
+    { name = "Andres Torres", email = "torres.andres87@gmail.com" },
 ]
 readme = "README.md"
 license = { text = "MIT" }
@@ -20,27 +20,21 @@ dependencies = [
     "wikipedia>=1.4.0",
 ]
 
-
 [project.optional-dependencies]
-dev = ["mypy>=1.11.1", "ruff>=0.6.1"]
+dev = [
+    "mypy>=1.11.1",
+    "ruff>=0.6.1"
+]
 
 [build-system]
-requires = ["setuptools>=73.0.0", "wheel"]
+requires = [
+    "setuptools>=73.0.0",
+    "wheel"
+]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = [
-    "langgraph.templates.web_research_graph",
-    "web_research_graph",
-    "interviews",
-    "answers"
-]
-[tool.setuptools.package-dir]
-"langgraph.templates.web_research_graph" = "src/web_research_graph"
-"web_research_graph" = "src/web_research_graph"
-"interviews" = "src/web_research_graph.interviews"
-"answers" = "src/web_research_graph.interviews.answers"
-
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
 "*" = ["py.typed"]
