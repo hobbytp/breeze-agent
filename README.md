@@ -54,6 +54,44 @@ BREEZE is inspired by STORM (Synthesis of Topic Outlines through Retrieval and M
    - Adds proper citations
    - Delivers polished final article
 
+## Usage
+
+1. **Installation**
+   ```bash
+   pip install breeze-agent
+   ```
+
+2. **API Keys Setup**
+   
+   BREEZE requires the following API keys to be set as environment variables:
+   - `ANTHROPIC_API_KEY`: For outline generations, expert interview interactions and section writing
+   - `OPENAI_API_KEY`: For embedding model access
+   - `TAVILY_API_KEY`: For web search capabilities
+
+   You can set these using environment variables:
+   ```bash
+   export ANTHROPIC_API_KEY="your-key-here"
+   export OPENAI_API_KEY="your-key-here"
+   export TAVILY_API_KEY="your-key-here"
+   ```
+
+3. **Basic Usage**
+   ```python
+   from web_research_graph.graph import graph
+   
+   # Initialize research query
+   result = await graph.ainvoke({
+       "messages": "Your research topic here"
+   })
+   
+   # Display results using markdown
+   from IPython.display import Markdown, display
+   display(Markdown(result["article"]))
+   ```
+
+4. **Output**
+   The system will generate a well-structured Wikipedia-style article based on your research topic, complete with citations and multiple expert perspectives.
+
 ## Example Topics
 
 - Technical: "Impact of Large Language Models on Software Development"
