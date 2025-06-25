@@ -40,18 +40,28 @@ def route_messages(state: InterviewState) -> str:
         # Since route_messages is called AFTER answer_question, 
         # the last message is almost always from expert
         if isinstance(last_message, AIMessage) and last_message.name == EXPERT_NAME:
-            # Check if the previous message (from editor) was a thank you
+            # Check if the previous message (from editor) wanted to end the conversation
             if len(current_messages) >= 2:
                 prev_message = current_messages[-2]
                 print(f"[DEBUG] Previous message from: {prev_message.name if hasattr(prev_message, 'name') else 'unknown'}")
-                if hasattr(prev_message, 'content'):
-                    print(f"[DEBUG] Previous message ends with thank you: {prev_message.content.endswith('Thank you so much for your help!')}")
                 
                 if (isinstance(prev_message, AIMessage) and 
-                    prev_message.name == current_editor_name and
-                    prev_message.content.endswith("Thank you so much for your help!")):
-                    print("[DEBUG] Editor said thank you in previous message - ending conversation")
-                    return "next_editor"
+                    prev_message.name == current_editor_name):
+                    
+                    # Check for structured output metadata
+                    wants_to_end = False
+                    end_reason = None
+                    
+                    if hasattr(prev_message, 'additional_kwargs') and prev_message.additional_kwargs:
+                        wants_to_end = prev_message.additional_kwargs.get("wants_to_end", False)
+                        end_reason = prev_message.additional_kwargs.get("end_reason")
+                        print(f"[DEBUG] Editor wants to end: {wants_to_end}, reason: {end_reason}")
+                    else:
+                        print("[DEBUG] No structured metadata found in editor message")
+                    
+                    if wants_to_end:
+                        print("[DEBUG] Editor wanted to end conversation - ending now")
+                        return "next_editor"
             
             # Count expert responses in this conversation
             expert_responses = len([
