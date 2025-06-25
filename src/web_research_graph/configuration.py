@@ -55,6 +55,13 @@ class Configuration:
         },
     )
 
+    max_turns: int = field(
+        default=3,
+        metadata={
+            "description": "The maximum number of turns (question-answer pairs) for each editor-expert conversation."
+        },
+    )
+
     @classmethod
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None

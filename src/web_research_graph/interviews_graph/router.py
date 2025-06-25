@@ -1,15 +1,20 @@
 """Router functions for managing interview flow."""
 
 from langchain_core.messages import AIMessage
+from langchain_core.runnables import RunnableConfig
 
+from web_research_graph.configuration import Configuration
 from web_research_graph.state import InterviewState
 from web_research_graph.utils import sanitize_name
 
-MAX_TURNS = 3
 EXPERT_NAME = "expert"
 
-def route_messages(state: InterviewState) -> str:
+def route_messages(state: InterviewState, config: RunnableConfig = None) -> str:
     """Determine whether to continue the interview or end it."""
+    # Get configuration
+    configuration = Configuration.from_runnable_config(config)
+    max_turns = configuration.max_turns
+    
     if not state.messages:
         return "end"
         
@@ -31,6 +36,7 @@ def route_messages(state: InterviewState) -> str:
     # Debug: Print current conversation state
     print(f"[DEBUG] Current editor: {current_editor_name}")
     print(f"[DEBUG] Total messages in conversation: {len(current_messages)}")
+    print(f"[DEBUG] Max turns configured: {max_turns}")
     
     # Get the last message
     if current_messages:
@@ -62,8 +68,8 @@ def route_messages(state: InterviewState) -> str:
             print(f"[DEBUG] Expert responses so far: {expert_responses}")
             
             # Check if we've reached max turns
-            if expert_responses >= MAX_TURNS:
-                print("[DEBUG] Max turns reached - ending conversation")
+            if expert_responses >= max_turns:
+                print(f"[DEBUG] Max turns ({max_turns}) reached - ending conversation")
                 return "next_editor"
             
             print("[DEBUG] Continuing conversation - editor should ask next question")
