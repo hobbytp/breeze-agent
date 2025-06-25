@@ -28,7 +28,7 @@ async def refine_outline(
     )
     
     # Create the chain with structured output
-    chain = REFINE_OUTLINE_PROMPT | model.with_structured_output(Outline)
+    chain = REFINE_OUTLINE_PROMPT | model.with_structured_output(Outline, method="function_calling")
     
     # Generate refined outline with explicit structure validation
     refined_outline = await chain.ainvoke(
@@ -58,5 +58,6 @@ async def refine_outline(
         outline=refined_outline,
         related_topics=state.related_topics,
         perspectives=state.perspectives,
+        references=state.references,
         is_last_step=state.is_last_step
     ) 

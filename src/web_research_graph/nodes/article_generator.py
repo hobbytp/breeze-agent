@@ -44,7 +44,7 @@ async def generate_section(
     
     # Create the chain
     model = load_chat_model(configuration.long_context_model, max_tokens=2000)
-    chain = SECTION_WRITER_PROMPT | model.with_structured_output(Section)
+    chain = SECTION_WRITER_PROMPT | model.with_structured_output(Section,method="function_calling")
     
     # Generate the section
     return await chain.ainvoke(

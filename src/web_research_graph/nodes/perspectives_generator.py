@@ -61,7 +61,7 @@ async def generate_perspectives(
 
     # Initialize the model and create the chain
     model = load_chat_model(configuration.fast_llm_model)
-    chain = PERSPECTIVES_PROMPT | model.with_structured_output(Perspectives)
+    chain = PERSPECTIVES_PROMPT | model.with_structured_output(Perspectives, method="function_calling")
 
     # Generate perspectives
     perspectives = await chain.ainvoke(

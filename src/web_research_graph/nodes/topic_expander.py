@@ -29,7 +29,7 @@ async def expand_topics(
         raise ValueError("No user message found in state")
 
     # Create the chain for topic expansion with structured output
-    chain = RELATED_TOPICS_PROMPT | model.with_structured_output(RelatedTopics)
+    chain = RELATED_TOPICS_PROMPT | model.with_structured_output(RelatedTopics, method="function_calling")
 
     # Generate related topics
     related_topics = await chain.ainvoke({"topic": last_user_message.content}, config)

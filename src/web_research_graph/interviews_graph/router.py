@@ -28,28 +28,52 @@ def route_messages(state: InterviewState) -> str:
     # Only look at messages after the conversation start
     current_messages = messages[conversation_start:]
     
+    # Debug: Print current conversation state
+    print(f"[DEBUG] Current editor: {current_editor_name}")
+    print(f"[DEBUG] Total messages in conversation: {len(current_messages)}")
+    
     # Get the last message
     if current_messages:
         last_message = current_messages[-1]
+        print(f"[DEBUG] Last message from: {last_message.name if hasattr(last_message, 'name') else 'unknown'}")
         
-        # If the last message was from the expert, wait for editor's response
+        # Since route_messages is called AFTER answer_question, 
+        # the last message is almost always from expert
         if isinstance(last_message, AIMessage) and last_message.name == EXPERT_NAME:
-            return "ask_question"
+            # Check if the previous message (from editor) was a thank you
+            if len(current_messages) >= 2:
+                prev_message = current_messages[-2]
+                print(f"[DEBUG] Previous message from: {prev_message.name if hasattr(prev_message, 'name') else 'unknown'}")
+                if hasattr(prev_message, 'content'):
+                    print(f"[DEBUG] Previous message ends with thank you: {prev_message.content.endswith('Thank you so much for your help!')}")
+                
+                if (isinstance(prev_message, AIMessage) and 
+                    prev_message.name == current_editor_name and
+                    prev_message.content.endswith("Thank you so much for your help!")):
+                    print("[DEBUG] Editor said thank you in previous message - ending conversation")
+                    return "next_editor"
             
-        # If the last message was from the editor
-        if isinstance(last_message, AIMessage) and last_message.name == current_editor_name:
             # Count expert responses in this conversation
             expert_responses = len([
                 m for m in current_messages 
                 if isinstance(m, AIMessage) and m.name == EXPERT_NAME
             ])
             
-            # Check if we've reached max turns or got a thank you
-            if (expert_responses >= MAX_TURNS or 
-                last_message.content.endswith("Thank you so much for your help!")):
+            print(f"[DEBUG] Expert responses so far: {expert_responses}")
+            
+            # Check if we've reached max turns
+            if expert_responses >= MAX_TURNS:
+                print("[DEBUG] Max turns reached - ending conversation")
                 return "next_editor"
-                
-            return "next_editor"
+            
+            print("[DEBUG] Continuing conversation - editor should ask next question")
+            return "ask_question"
+            
+        # If the last message was from the editor (rare case, but handle it)
+        if isinstance(last_message, AIMessage) and last_message.name == current_editor_name:
+            print("[DEBUG] Last message from editor - expert should answer")
+            return "ask_question"
     
     # If we're just starting, ask a question
+    print("[DEBUG] Starting conversation")
     return "ask_question" 

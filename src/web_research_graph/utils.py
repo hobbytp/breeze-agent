@@ -1,5 +1,6 @@
 """Utility & helper functions."""
 
+import os
 from typing import Dict, Any, Optional
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
@@ -34,6 +35,15 @@ def load_chat_model(fully_specified_name: str, max_tokens: Optional[int] = None)
     kwargs = {}
     if max_tokens is not None:
         kwargs["max_tokens"] = max_tokens
+    if provider == "openai":
+        kwargs["base_url"] = os.getenv("OPENAI_BASE_URL")
+        kwargs["api_key"] = os.getenv("OPENAI_API_KEY")
+    elif provider == "anthropic":
+        kwargs["base_url"] = os.getenv("ANTHROPIC_BASE_URL")
+        kwargs["api_key"] = os.getenv("ANTHROPIC_API_KEY")
+    print(f"kwargs: {kwargs}")
+    print(f"provider: {provider}")
+    print(f"model: {model}")
     return init_chat_model(model, model_provider=provider, **kwargs)
 
 def dict_to_section(section_dict: Dict[str, Any]) -> Section:

@@ -2,9 +2,7 @@
 name = "web-research-graph"
 version = "0.0.5"
 description = "A LangGraph-based workflow for conducting web research and generating structured content."
-authors = [
-    { name = "Andres Torres", email = "torres.andres87@gmail.com" },
-]
+authors = [{ name = "Andres Torres", email = "torres.andres87@gmail.com" }]
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"
@@ -21,16 +19,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "mypy>=1.11.1",
-    "ruff>=0.6.1"
-]
+dev = ["mypy>=1.11.1", "ruff>=0.6.1", "ipython>=8.0.0"]
 
 [build-system]
-requires = [
-    "setuptools>=73.0.0",
-    "wheel"
-]
+requires = ["setuptools>=80.9.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
@@ -62,3 +54,10 @@ lint.ignore = [
 "tests/*" = ["D", "UP"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.uv]
+dev-dependencies = ["mypy>=1.11.1", "ruff>=0.6.1", "pytest>=7.0.0"]
+
+#[tool.uv.sources]
+# 如果需要从特定源安装包
+#langgraph = { git = "https://github.com/langchain-ai/langgraph.git", branch = "main" }
