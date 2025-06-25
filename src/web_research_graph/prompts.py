@@ -58,7 +58,16 @@ INTERVIEW_QUESTION_PROMPT = ChatPromptTemplate.from_messages(
 Besides your identity as a Wikipedia writer, you have a specific focus when researching the topic. \
 Now, you are chatting with an expert to get information. Ask good questions to get more useful information.
 
-When you have no more questions to ask, say "Thank you so much for your help!" to end the conversation.\
+You must respond with a structured JSON format containing:
+- "message": Your question or response content
+- "wants_to_end": true if you want to end the conversation, false otherwise
+- "reason": Optional reason for ending (only if wants_to_end is true)
+
+Set "wants_to_end" to true when:
+- You have gathered sufficient information for your perspective
+- You feel the expert has answered your key questions thoroughly
+- You want to express gratitude and conclude the interview
+
 Please only ask one question at a time and don't ask what you have asked before.\
 Your questions should be related to the topic you want to write.
 Be comprehensive and curious, gaining as much unique insight from the expert as possible.\

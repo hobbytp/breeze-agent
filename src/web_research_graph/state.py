@@ -130,6 +130,20 @@ class TopicValidation(BaseModel):
         description="Feedback message about the topic validation result"
     )
 
+class EditorResponse(BaseModel):
+    """Structured output for editor responses during interviews."""
+    
+    message: str = Field(
+        description="The editor's question or response content"
+    )
+    wants_to_end: bool = Field(
+        description="Whether the editor wants to end the conversation"
+    )
+    reason: Optional[str] = Field(
+        default=None,
+        description="Optional reason for ending the conversation"
+    )
+
 def default_topic_validation() -> TopicValidation:
     """Create a default TopicValidation instance."""
     return TopicValidation(is_valid=False, topic=None, message=None)
