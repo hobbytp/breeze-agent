@@ -4,7 +4,7 @@ from langgraph.graph import StateGraph, START, END
 
 from web_research_graph.configuration import Configuration
 from web_research_graph.nodes.article_generator import generate_article
-from web_research_graph.interviews_graph.graph import interview_graph
+from web_research_graph.interviews_graph.conductor import conduct_interviews
 from web_research_graph.nodes.outline_generator import generate_outline
 from web_research_graph.nodes.outline_refiner import refine_outline
 from web_research_graph.nodes.perspectives_generator import generate_perspectives
@@ -27,7 +27,7 @@ builder.add_node("generate_perspectives", generate_perspectives)
 builder.add_node("refine_outline", refine_outline)
 builder.add_node("generate_article", generate_article)
 
-builder.add_node("conduct_interviews", interview_graph)
+builder.add_node("conduct_interviews", conduct_interviews)
 
 builder.add_edge(START, "validate_topic")
 builder.add_conditional_edges(
