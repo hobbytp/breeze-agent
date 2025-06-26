@@ -40,11 +40,20 @@ async def refine_outline(
             },
             config
         )
-    except Exception as e:
-        # If outline refinement fails due to validation errors, use the original outline
-        print(f"Warning: Outline refinement failed with error: {e}")
+    except ValueError as e:
+        # Handle validation errors specifically
+        print(f"Warning: Outline refinement failed due to validation error: {e}")
         print("Falling back to original outline")
         refined_outline = current_outline
+    except RuntimeError as e:
+        # Handle runtime errors from the chain invocation
+        print(f"Warning: Outline refinement failed due to runtime error: {e}")
+        print("Falling back to original outline")
+        refined_outline = current_outline
+    except Exception as e:
+        # Rethrow unexpected exceptions
+        print(f"Unexpected error during outline refinement: {e}")
+        raise
     
     # Ensure we maintain the structure
     if not refined_outline.sections:
