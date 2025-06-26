@@ -37,7 +37,7 @@ def _extract_editors_from_perspectives(perspectives: Union[Perspectives, dict, N
     if not perspectives:
         raise ValueError("No perspectives found in state")
     
-    # 如果是Perspectives对象
+    # 如果是Perspectives对象， 注意，这里perspectives会一直是dict类型。
     print(f"!!! === In parallel_conduct_interviews, perspectives is type: {type(perspectives)}")
     if isinstance(perspectives, Perspectives):        
         if not perspectives.editors:
