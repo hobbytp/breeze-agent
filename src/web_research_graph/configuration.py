@@ -62,6 +62,23 @@ class Configuration:
         },
     )
 
+    parallel_interviews: bool = field(
+        default=False,
+        metadata={
+            "description": "Whether to conduct editor-expert interviews in parallel. "
+            "When True, all editors interview experts simultaneously for better performance. "
+            "When False, interviews are conducted sequentially (original behavior)."
+        },
+    )
+
+    max_parallel_interviews: int = field(
+        default=3,
+        metadata={
+            "description": "Maximum number of parallel interviews to run simultaneously. "
+            "Only used when parallel_interviews is True. Helps manage API rate limits."
+        },
+    )
+
     @classmethod
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None
