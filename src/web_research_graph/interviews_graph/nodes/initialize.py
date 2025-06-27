@@ -14,7 +14,6 @@ def _extract_editors_from_perspectives(perspectives: Union[Perspectives, dict, N
         raise ValueError("No perspectives found in state")
     
     # 如果是Perspectives对象
-    print(f"!!! === In initialize, perspectives is type: {type(perspectives)}")
     if isinstance(perspectives, Perspectives):
         if not perspectives.editors:
             raise ValueError("No editors found in perspectives")

@@ -26,5 +26,6 @@ async def conduct_interviews(state: State, config: RunnableConfig = None) -> Sta
             perspectives=state.perspectives,
             article=state.article,
             references={**(state.references or {}), **(interview_state.references or {})},
-            topic=state.topic
+            topic=state.topic,
+            all_conversations=None  # 串行模式下为None，让工具函数从messages解析
         ) 
