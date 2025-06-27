@@ -67,7 +67,8 @@ async def generate_perspectives(
     perspectives = await chain.ainvoke(
         {
             "examples": formatted_docs,
-            "topic": last_user_message.content
+            "topic": last_user_message.content,
+            "max_editors": configuration.max_editors
         },
         config
     )

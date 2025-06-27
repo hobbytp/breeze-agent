@@ -79,6 +79,14 @@ class Configuration:
         },
     )
 
+    max_editors: int = field(
+        default=3,
+        metadata={
+            "description": "The maximum number of editors to generate for diverse perspectives. "
+            "Each editor represents a different perspective, role, or affiliation related to the topic."
+        },
+    )
+
     @classmethod
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None

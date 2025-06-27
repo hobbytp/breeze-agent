@@ -68,6 +68,7 @@ class Section(BaseModel):
         description="The main content/summary of the section"
     )
     subsections: List[Subsection] = Field(
+        default_factory=list,
         description="List of subsections within this section"
     )
     citations: List[str] = Field(
@@ -95,6 +96,7 @@ class Outline(BaseModel):
         description="The main title of the Wikipedia article"
     )
     sections: List[Section] = Field(
+        default_factory=list,
         description="List of sections that make up the article"
     )
 

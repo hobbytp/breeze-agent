@@ -57,7 +57,8 @@ async def demo_parallel_interviews():
     my_custom_params = {
         "fast_llm_model": "openai/gpt-4o-mini",
         "long_context_model": "openai/gpt-4o",
-        "max_search_results": 3,  # 你也可以覆盖非模型参数
+        "max_editors": 2,
+        "max_search_results": 1,  # 你也可以覆盖非模型参数
         "parallel_interviews": True,  # 并行模式
         "max_parallel_interviews": 3,  # 最多3个并发访谈
         "max_turns": 2,  # 每个编辑器最多2轮对话

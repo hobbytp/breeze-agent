@@ -22,6 +22,7 @@ async def main():
     my_custom_params = {
         "fast_llm_model": "openai/gpt-4o-mini",
         "long_context_model": "openai/gpt-4o",
+        "max_editors": 6,
         "max_search_results": 3, # 你也可以覆盖非模型参数
         "max_turns": 5, # 每个编辑与专家的最大对话轮数
         "system_prompt": "You are a helpful assistant that can help with research tasks." # 甚至可以覆盖系统提示
