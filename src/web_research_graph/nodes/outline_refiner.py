@@ -4,7 +4,7 @@ from typing import Optional
 from langchain_core.runnables import RunnableConfig
 
 from web_research_graph.configuration import Configuration
-from web_research_graph.state import State, Outline
+from web_research_graph.state import State, Outline, format_conversations_for_outline
 from web_research_graph.utils import load_chat_model, get_message_text
 from web_research_graph.prompts import REFINE_OUTLINE_PROMPT
 
@@ -21,11 +21,15 @@ async def refine_outline(
    
     current_outline = state.outline
         
-    # Format conversations from the state's messages
-    conversations = "\n\n".join(
-        f"### {m.name}\n\n{get_message_text(m)}" 
-        for m in state.messages
-    )
+    # 使用新的结构化对话格式化函数
+    conversations = format_conversations_for_outline(state)
+    
+    # 如果结构化对话为空，回退到原始方法（向后兼容）
+    if not conversations:
+        conversations = "\n\n".join(
+            f"### {m.name}\n\n{get_message_text(m)}" 
+            for m in state.messages
+        )
     
     # Create the chain with structured output
     chain = REFINE_OUTLINE_PROMPT | model.with_structured_output(Outline, method="function_calling")
@@ -40,20 +44,11 @@ async def refine_outline(
             },
             config
         )
-    except ValueError as e:
-        # Handle validation errors specifically
-        print(f"Warning: Outline refinement failed due to validation error: {e}")
-        print("Falling back to original outline")
-        refined_outline = current_outline
-    except RuntimeError as e:
-        # Handle runtime errors from the chain invocation
-        print(f"Warning: Outline refinement failed due to runtime error: {e}")
-        print("Falling back to original outline")
-        refined_outline = current_outline
     except Exception as e:
-        # Rethrow unexpected exceptions
-        print(f"Unexpected error during outline refinement: {e}")
-        raise
+        # If outline refinement fails due to validation errors, use the original outline
+        print(f"Warning: Outline refinement failed with error: {e}")
+        print("Falling back to original outline")
+        refined_outline = current_outline
     
     # Ensure we maintain the structure
     if not refined_outline.sections:

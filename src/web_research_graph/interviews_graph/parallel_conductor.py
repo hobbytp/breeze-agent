@@ -83,9 +83,9 @@ async def parallel_conduct_interviews(state: State, config: RunnableConfig = Non
     # 汇总结果
     merged_messages = state.messages.copy()
     merged_references = state.references.copy() if state.references else {}
+    all_conversations = {}
     
     for i, result in enumerate(results):
-        # editor_name = editors[i]["name"]
         editor_name = editors[i].name
         # 添加分隔符标识不同editor的对话
         from langchain_core.messages import AIMessage
@@ -95,8 +95,9 @@ async def parallel_conduct_interviews(state: State, config: RunnableConfig = Non
         )
         merged_messages.append(separator)
         
-        # 正确访问字典中的messages
-        if "messages" in result:
+        # 保存结构化对话
+        if "messages" in result and result["messages"]:
+            all_conversations[editor_name] = result["messages"]
             merged_messages.extend(result["messages"])
         
         # 合并参考资料，避免URL冲突
@@ -113,5 +114,6 @@ async def parallel_conduct_interviews(state: State, config: RunnableConfig = Non
         perspectives=state.perspectives,  # 保持原始的完整perspectives
         article=state.article,
         references=merged_references,
-        topic=state.topic
+        topic=state.topic,
+        all_conversations=all_conversations  # 新增：保存结构化对话
     ) 

@@ -159,6 +159,7 @@ class State(InputState, OutputState):
     article: Optional[str] = field(default=None)
     references: Annotated[Optional[dict], field(default=None)] = None
     topic: TopicValidation = field(default_factory=default_topic_validation)
+    all_conversations: Annotated[Optional[dict], field(default=None)] = None
 
 @dataclass
 class InterviewState:
@@ -171,3 +172,114 @@ class InterviewState:
     current_editor_index: int = field(default=0)
     is_complete: bool = field(default=False)
     perspectives: Optional[Perspectives] = field(default=None)
+
+def extract_conversations_by_editor(state: State) -> dict:
+    """
+    从State中提取按编辑器组织的对话。
+    
+    优先使用all_conversations，如果不存在则从messages中解析。
+    返回格式: {"editor_name": [messages_for_this_editor]}
+    """
+    from typing import Dict
+    from langchain_core.messages import AIMessage
+    
+    # 如果存在结构化对话，直接使用
+    if state.all_conversations:
+        return state.all_conversations
+    
+    # 否则从messages中解析（向后兼容）
+    if not state.messages or not state.perspectives:
+        return {}
+    
+    # 处理perspectives可能是dict的情况
+    if isinstance(state.perspectives, dict):
+        if 'editors' not in state.perspectives or not state.perspectives['editors']:
+            return {}
+        editors = state.perspectives['editors']
+        # 如果editors中的项目是dict，需要转换为Editor对象
+        if editors and isinstance(editors[0], dict):
+            editors = [Editor(**editor_dict) for editor_dict in editors]
+    else:
+        if not state.perspectives.editors:
+            return {}
+        editors = state.perspectives.editors
+    
+    conversations = {}
+    current_editor = None
+    current_conversation = []
+    
+    for message in state.messages:
+        if isinstance(message, AIMessage):
+            # 检查是否是分隔符消息
+            if (message.name == "system" and 
+                "Interview with" in message.content and 
+                "---" in message.content):
+                # 保存上一个编辑器的对话
+                if current_editor and current_conversation:
+                    conversations[current_editor] = current_conversation.copy()
+                
+                # 提取新编辑器名称
+                for editor in editors:
+                    editor_name = editor.name if hasattr(editor, 'name') else editor.get('name', '')
+                    if editor_name in message.content:
+                        current_editor = editor_name
+                        current_conversation = []
+                        break
+            else:
+                # 普通消息，添加到当前对话
+                if current_editor:
+                    current_conversation.append(message)
+    
+    # 保存最后一个编辑器的对话
+    if current_editor and current_conversation:
+        conversations[current_editor] = current_conversation
+    
+    return conversations
+
+
+def format_conversations_for_outline(state: State) -> str:
+    """
+    按编辑器顺序格式化对话，用于outline refinement。
+    
+    确保按照State中perspectives.editors的顺序来组织对话。
+    """
+    if not state.perspectives:
+        return ""
+    
+    # 处理perspectives可能是dict的情况（LangGraph序列化）
+    if isinstance(state.perspectives, dict):
+        if 'editors' not in state.perspectives or not state.perspectives['editors']:
+            return ""
+        editors = state.perspectives['editors']
+        # 如果editors中的项目是dict，需要转换为Editor对象
+        if editors and isinstance(editors[0], dict):
+            editors = [Editor(**editor_dict) for editor_dict in editors]
+    else:
+        # perspectives是Perspectives对象
+        if not state.perspectives.editors:
+            return ""
+        editors = state.perspectives.editors
+    
+    conversations = extract_conversations_by_editor(state)
+    formatted_parts = []
+    
+    # 按照原始编辑器顺序组织对话
+    for editor in editors:
+        editor_name = editor.name
+        if editor_name in conversations and conversations[editor_name]:
+            # 格式化这个编辑器的对话
+            editor_conversations = []
+            for message in conversations[editor_name]:
+                if hasattr(message, 'name') and hasattr(message, 'content'):
+                    # 获取消息内容
+                    content = message.content if hasattr(message, 'content') else str(message)
+                    if content and content.strip():
+                        editor_conversations.append(f"**{message.name}**: {content}")
+            
+            if editor_conversations:
+                formatted_parts.append(
+                    f"### Interview with {editor_name} ({editor.role})\n\n" + 
+                    "\n\n".join(editor_conversations)
+                )
+    
+    return "\n\n---\n\n".join(formatted_parts)
